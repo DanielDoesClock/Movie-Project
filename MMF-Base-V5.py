@@ -10,6 +10,17 @@ def blank_check(ask_name):
             return response    # Returns name
 
 
+# Check for valid integer (for age)
+def int_check(question):
+    number = ""
+    while not number:
+        # Asking for a number and checking if it is valid
+        try:
+            number = int(input(question))
+            return number
+        except ValueError:
+            print("\nPlease enter an integer (whole number)")
+
 # ******* Main Routine *******
 
 # Set up dictionaries / lists to hold data
@@ -36,6 +47,20 @@ while name != "Xxx" and count != MAX_TICKETS:
     name = blank_check("What is your name? >> ")
     count += 1
     seats -= 1
+    if name == "Xxx":
+        break
+    else:
+        MAX_AGE = 110
+        MIN_AGE = 12
+        age = int_check("\nPlease enter age of ticket-holder >> ")
+        if age < MIN_AGE:
+            print("You are too young to watch this move.")
+            count -= 1
+            seats += 1
+        elif age > MAX_AGE:
+            print("There is no way you are that old!")
+            count -= 1
+            seats += 1
 
 
 if seats == 0:

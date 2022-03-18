@@ -20,7 +20,7 @@ def blank_check(ask_name):
 # Loop to get ticket details
 
     # Get name (cant be blank)
-    name = blank_check("What is your name? >> ")
+name = blank_check("What is your name? >> ")
     # Get age (12-130)
 
     # Calculate ticket price
