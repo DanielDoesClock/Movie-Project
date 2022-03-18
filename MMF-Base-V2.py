@@ -4,7 +4,7 @@
 def blank_check(ask_name):
     while True:
         response = input(ask_name)
-        if not response.isalpha():    # Checks if name has at least 1 letter
+        if not response.isalpha():   # Checks if name has at least 1 letter
             print("Please do not leave this blank!")    # Error message if not
         else:
             return response    # Returns name
