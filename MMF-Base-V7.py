@@ -1,4 +1,5 @@
-"""This is V7 of my final project file. I am adding a profit calculator
+"""This is V7 of my final project file. I am adding a profit calculator and
+yes/no checker
 Made By Daniel Fraser
 27/03/22"""
 
