@@ -1,7 +1,7 @@
-"""This is component 8 of MMF and will create lists of all of the snacks
-that have been ordered and adds a 'sub total' block.
-Made by Daniel Fraser
-04/04/22"""
+"""This is component 9 of my MMF and this creates the lists of all information
+Created by Daniel Fraser
+5/04/22"""
+
 
 import pandas
 
