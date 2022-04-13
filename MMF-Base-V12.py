@@ -34,33 +34,39 @@ def get_choice(choice, valid_choices):
 
 
 def collate_order():
-    valid_snacks = [["popcorn", "p", "pop", "corn", "(1"],
-                    ["m&ms", "mms", "mm", "m", "(2"],
+    valid_snacks = [["popcorn", "p", "corn", "(1"], ["m&ms", "mms", "m", "(2"],
                     ["pita chips", "chips", "pc", "pita", "c", "(3"],
-                    ["water", "h2o", "w", "(4"],
-                    ["orange juice", "oj", "o", "juice", "(5"],
+                    ["water", "w", "(4"], ["orange juice", "oj", "(5"],
                     ["x", "exit", "(6"]]
     valid_yes_no = [["y", "yes"], ["n", "no"]]
-    snacks_order = []
+    snack_order = []
     max_snacks = 4
-    option = ""
-    while option != "X":
-        snack = input("What snack do you want? - qty then item"
-                      "\n e.g. '2 Popcorn' OR 'x' "
-                      "To stop ordering >> ").lower()
-        snack = split_order(snack)
-        quantity = snack[0]
-
-        if quantity > max_snacks:
-            print("Sorry, the max number of snacks is 4")
+    getting_snacks = True
+    while getting_snacks:
+        snacks_required = ""
+        while snacks_required != "N" and snacks_required != "Y":
+            check_snacks = input("Do you want snacks? (Y/N) >> ").lower()
+            snacks_required = get_choice(check_snacks, valid_yes_no)
+        if snacks_required == "N":
+            getting_snacks = False
+            break
         else:
-            snack = snack[1]
-            option = get_choice(snack, valid_snacks)
-            if option == "X":
-                break
-            elif option is not None:
-                snacks_order.append([quantity, option])
-    return snacks_order
+            option = ""
+            while option != "X":
+                snack = input("Please choose a snack 'x' to exit >> ").lower()
+                snack = split_order(snack)
+                quantity = snack[0]
+                if quantity > max_snacks:
+                    snack = None
+                    print("Sorry, the maximum number of snacks is 4")
+                else:
+                    snack = snack[1]
+                    option = get_choice(snack, valid_snacks)
+                    if option == "X":
+                        getting_snacks = False
+                    elif option is not None:
+                        snack_order.append([quantity, option])
+    return snack_order
 
 
 # Calculates the ticket price based on age
@@ -109,14 +115,14 @@ def check_max_tickets(maximum, sold):
 
 
 def check_valid_age(minimum, maximum):
-    valid_age = int_check(f"Please enter {name}'s age >> ")
-    if valid_age < minimum:
+    age = int_check(f"Please enter {name}'s age >> ")
+    if age < minimum:
         print(f"{name} is young to watch this move.")
         return None
     else:
-        while not valid_age <= MAXIMUM_AGE:
+        while not age <= MAXIMUM_AGE:
             print(f"There is no way {name} could be that old!")
-        return valid_age
+        return age
 
 
 def check_valid_payment_method():
@@ -207,8 +213,6 @@ while name != "X" and ticket_count < MAX_TICKETS:
         all_names.append(name)
         all_tickets.append(ticket_price)
 
-        ticket_profit += (ticket_price - TICKET_COST_PRICE)
-
         # Get snacks
         snack_order = collate_order()
 
@@ -230,10 +234,10 @@ while name != "X" and ticket_count < MAX_TICKETS:
             print("No snacks ordered")
 
         payment_method = check_valid_payment_method()
-        while not payment_method:
-            payment_method = check_valid_payment_method()
+        if not payment_method:
+            continue
 
-        if payment_method == "Credit Card":
+        elif payment_method == "Credit Card":
             surcharge_multiplier = SURCHARGE_RATE
 
         else:
@@ -278,19 +282,14 @@ movie_frame = movie_frame.rename(columns={"Orange Juice": "OJ",
                                           "Surcharge Multiplier": "SM"})
 
 for item in snack_lists:
-    summary_data.append(sum(item))
+    summary_data.appent(sum(item))
 
 snack_total = movie_frame["Snack Cost"].sum()
 snack_profit = snack_total * SNACK_PROFIT_MARGIN
 summary_data.append(snack_profit)
 
-summary_data.append(ticket_profit)
-
 total_profit = snack_profit + ticket_profit
 summary_data.append(total_profit)
-
-summary_frame = pandas.DataFrame(summary_data_dict)
-summary_frame = summary_frame.set_index("Item")
 
 pandas.set_option("display.max_columns", None)
 
@@ -299,13 +298,12 @@ pandas.set_option("display.precision", 2)
 print(movie_frame)
 print()
 
+print_all = input("Print all columns? (Y for yes) >> ").upper()
+if print_all == "Y":
+    print(movie_frame)
+else:
+    print(movie_frame[["Ticket", "Snack Cost", "Sub Total", "Surcharge",
+                       "Total"]])
 print()
-print("******* Ticket/Snack Information *******")
-print("Note: For full details please see Exel file named 'zzz'")
-print()
-print(movie_frame[["Ticket", "Snack Cost", "Sub Total", "Surcharge", "Total"]])
-print()
-print("******* Snack/Profit Summary *******")
-print()
-print(summary_frame)
+
 # Output data to text file

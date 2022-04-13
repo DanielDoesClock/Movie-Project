@@ -1,5 +1,4 @@
-"""This is V13 of my final project file. I am getting some feedback from and
-end user and implementing that feedback into the code.
+"""This is V15 of my final project file. I am adding the export to .csv file
 Made By Daniel Fraser
 10/04/22"""
 
@@ -302,14 +301,17 @@ summary_frame = summary_frame.set_index("Item")
 
 pandas.set_option("display.max_columns", None)
 
-pandas.set_option("display.precision", 2)
+currency_amounts = ["Ticket", "Snack Cost", "Sub Total", "Surcharge", "Total"]
+for amount in currency_amounts:
+    movie_frame[amount] = movie_frame[amount].apply(currency)
 
-print(movie_frame)
-print()
+movie_frame.to_csv("ticket_details.csv")
+summary_frame.to_csv("snack_summary.csv")
 
 print()
 print("******* Ticket/Snack Information *******")
-print("Note: For full details please see Exel file named 'zzz'")
+print("Note: For full details please see Exel file named 'ticket_summary.csv'"
+      " and 'snack_summary.csv")
 print()
 print(movie_frame[["Ticket", "Snack Cost", "Sub Total", "Surcharge", "Total"]])
 print()
